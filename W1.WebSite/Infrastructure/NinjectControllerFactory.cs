@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using W1.Domain.Concrete;
 using System.Configuration;
+using W1.WebUI.Infrastructure.Abstract;
+using W1.WebUI.Infrastructure.Concrete;
 
 namespace W1.WebUI.Infrastructure
 {
@@ -48,6 +50,7 @@ namespace W1.WebUI.Infrastructure
             ninjectKernel.Bind<IOrderProcessor>()
                 .To<EmailOrderProcessor>()
                 .WithConstructorArgument("settings", emailSettings);
+            ninjectKernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
         }
     } 
 }

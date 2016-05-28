@@ -6,6 +6,7 @@ using W1.Domain.Entities;
 
 namespace W1.WebUI.Controllers
 {
+    [Authorize] 
     public class AdminController : Controller
     {
         private IProductRepository repository;
