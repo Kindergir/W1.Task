@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Linq;
 using W1.Domain.Abstract;
 using W1.Domain.Entities;
+using System.Web;
 
 namespace W1.WebUI.Controllers
 {
@@ -29,10 +30,16 @@ namespace W1.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product)
+        public ActionResult Edit(Product product, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
+                 if (image != null)
+                { 
+                    product.ImageMimeType = image.ContentType; 
+                    product.ImageData = new byte[image.ContentLength]; 
+                    image.InputStream.Read(product.ImageData, 0, image.ContentLength); 
+                } 
                 repository.SaveProduct(product);
                 TempData["message"] = string.Format("{0} has been saved", product.Name);
                 return RedirectToAction("Index");
