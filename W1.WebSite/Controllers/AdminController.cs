@@ -19,13 +19,12 @@ namespace W1.WebUI.Controllers
 
         public ViewResult Index()
         {
-            return View(repository.Products);
+            return View(DataBasesAPI.DataBaseExplorer.GetProductsFromDataBase(null, 1, DataBasesAPI.DataBaseExplorer.GetTotalCount()));
         }
 
         public ViewResult Edit(int productId)
         {
-            Product product = repository.Products
-                .FirstOrDefault(p => p.ProductID == productId);
+            Product product = DataBasesAPI.DataBaseExplorer.GetProductFromDataBase(productId);
             return View(product);
         }
 
@@ -39,8 +38,9 @@ namespace W1.WebUI.Controllers
                     product.ImageMimeType = image.ContentType; 
                     product.ImageData = new byte[image.ContentLength]; 
                     image.InputStream.Read(product.ImageData, 0, image.ContentLength); 
-                } 
-                repository.SaveProduct(product);
+                }
+
+                DataBasesAPI.DataBaseExplorer.InsertProduct(product.ProductID == 0, product, image);
                 TempData["message"] = string.Format("{0} has been saved", product.Name);
                 return RedirectToAction("Index");
             }
@@ -59,11 +59,7 @@ namespace W1.WebUI.Controllers
         [HttpPost]
         public ActionResult Delete(int productId)
         {
-            Product deletedProduct = repository.DeleteProduct(productId);
-            if (deletedProduct != null)
-            {
-                TempData["message"] = string.Format("{0} was deleted", deletedProduct.Name);
-            }
+            DataBasesAPI.DataBaseExplorer.DeleteProduct(productId);
             return RedirectToAction("Index");
         }
     }

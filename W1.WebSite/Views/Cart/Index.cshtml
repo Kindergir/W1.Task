@@ -2,6 +2,7 @@
 
 @{
   ViewBag.Title = "Sweets Store: Your Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Your cart</h2>
@@ -17,7 +18,29 @@
     <tbody>
         @foreach (var line in Model.Cart.Lines) {
         <tr>
-            <td align="center">@line.Quantity</td>
+            <td align="center">
+                <table>
+                    <tr>
+                        <td>
+                            @using (Html.BeginForm("TakeFromCart", "Cart")) {
+                            @Html.Hidden("ProductId", line.Product.ProductID)
+                            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                            <input class="actionButtons" type="submit" value="-" style="padding: .15em 0.55em .2em 0.5em;" />
+                            }
+                        </td>
+                        <td>
+                            @line.Quantity
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("AddToCart", "Cart")) {
+                            @Html.Hidden("ProductId", line.Product.ProductID)
+                            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                            <input class="actionButtons" type="submit" value="+" style="padding: .15em 0.55em .2em 0.5em;" />
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </td>
             <td align="left">@line.Product.Name</td>
             <td align="right">@line.Product.Price.ToString("c")</td>
             <td align="right">@((line.Quantity * line.Product.Price).ToString("c"))</td>

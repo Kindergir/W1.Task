@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using W1.HtmlHelpers;
+
 
 namespace W1.WebUI.Controllers
 {
@@ -30,8 +32,8 @@ namespace W1.WebUI.Controllers
         } 
 
         public RedirectToRouteResult AddToCart(Cart cart, int productId, string returnUrl) 
-        { 
-            Product product = repository.Products .FirstOrDefault(p => p.ProductID == productId); 
+        {
+            Product product = DataBasesAPI.DataBaseExplorer.GetProductFromDataBase(productId);
 
             if (product != null) 
             { 
@@ -41,9 +43,21 @@ namespace W1.WebUI.Controllers
             return RedirectToAction("Index", new { returnUrl }); 
         }
 
+        public RedirectToRouteResult TakeFromCart(Cart cart, int productId, string returnUrl)
+        {
+            Product product = DataBasesAPI.DataBaseExplorer.GetProductFromDataBase(productId);
+
+            if (product != null)
+            {
+                cart.AddItem(product, -1);
+            }
+
+            return RedirectToAction("Index", new { returnUrl });
+        }
+
         public RedirectToRouteResult RemoveFromCart(Cart cart, int productId, string returnUrl)
         {
-            Product product = repository.Products.FirstOrDefault(p => p.ProductID == productId);
+            Product product = DataBasesAPI.DataBaseExplorer.GetProductFromDataBase(productId);
 
             if (product != null)
             {
@@ -67,9 +81,13 @@ namespace W1.WebUI.Controllers
             }
             if (ModelState.IsValid)
             {
-                orderProcessor.ProcessOrder(cart, shippingDetails);
+                System.Web.HttpContext.Current.Items.Add("Cart", cart);
+                System.Web.HttpContext.Current.Items.Add("ShippingDetails", shippingDetails);
+                PaymentForm paymentForm = new PaymentForm();
+                paymentForm.ProcessRequest(System.Web.HttpContext.Current);
+                //orderProcessor.ProcessOrder(cart, shippingDetails);
                 cart.Clear();
-                return View("Completed");
+                return View("Complete");
             }
             else
             {

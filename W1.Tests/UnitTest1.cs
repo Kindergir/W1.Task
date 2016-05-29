@@ -3,14 +3,13 @@ using Moq;
 using W1.Domain.Abstract;
 using W1.Domain.Entities;
 using W1.WebUI.Controllers;
-using W1.WebUI.Models;
-using W1.WebUI.HtmlHelpers;
+using W1.WebUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace SportsStore.UnitTests
+namespace W1.UnitTests
 {
     [TestClass]
     public class UnitTest1

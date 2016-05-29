@@ -34,3 +34,5 @@ D:\Универчик\2 курс\2 семестр\W1\W1.WebSite\bin\Newtonsoft.J
 D:\Универчик\2 курс\2 семестр\W1\W1.WebSite\bin\System.Net.Http.Formatting.xml
 D:\Универчик\2 курс\2 семестр\W1\W1.WebSite\bin\System.Web.Http.xml
 D:\Универчик\2 курс\2 семестр\W1\W1.WebSite\bin\System.Web.Http.WebHost.xml
+D:\Универчик\2 курс\2 семестр\W1\W1.WebSite\bin\DataBasesAPI.dll
+D:\Универчик\2 курс\2 семестр\W1\W1.WebSite\bin\DataBasesAPI.pdb

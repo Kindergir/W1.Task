@@ -2,7 +2,7 @@
 using W1.WebUI.Infrastructure.Abstract;
 using W1.WebUI.Models;
 
-namespace SportsStore.WebUI.Controllers
+namespace W1.WebUI.Controllers
 {
     public class AccountController : Controller
     {

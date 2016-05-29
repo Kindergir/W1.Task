@@ -27,6 +27,10 @@ namespace W1.Domain.Entities
             else
             {
                 line.Quantity += quantity;
+                if (line.Quantity == 0)
+                {
+                    RemoveLine(product);
+                }
             }
         }
 

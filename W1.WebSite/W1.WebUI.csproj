@@ -129,6 +129,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlHelpers\PagingHelpers.cs" />
+    <Compile Include="HtmlHelpers\PaymentForm.cs" />
     <Compile Include="Infrastructure\Abstract\IAuthProvider.cs" />
     <Compile Include="Infrastructure\Concrete\FormsAuthProvider.cs" />
     <Compile Include="Infrastructure\NinjectControllerFactory.cs" />
@@ -161,6 +162,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataBasesAPI\DataBasesAPI.csproj">
+      <Project>{8af0a13d-1d96-4c40-9497-29644fcd2a17}</Project>
+      <Name>DataBasesAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\W1Shop\W1.Domain.csproj">
       <Project>{ef22e2b8-e4bc-4c68-afe9-45b2cfe9226d}</Project>
       <Name>W1.Domain</Name>
