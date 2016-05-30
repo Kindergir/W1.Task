@@ -21,50 +21,33 @@ namespace DataBasesAPI
                 SqlCommand cmd;
 
                 cmd = connection.CreateCommand();
-                cmd.CommandText = "TotalCount";
+                cmd.CommandText = "GetTotalCount";
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                SqlParameter categoryParameter = new SqlParameter();
-                categoryParameter.ParameterName = "@Category";
-                categoryParameter.SqlDbType = SqlDbType.NVarChar;
-                categoryParameter.Size = 50;
-                categoryParameter.Value = category;
-                cmd.Parameters.Add(categoryParameter);
-
-                SqlParameter TotalCount = new SqlParameter();
-                TotalCount.ParameterName = "@TotalCount";
-                TotalCount.SqlDbType = SqlDbType.Int;
-                TotalCount.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(TotalCount);
+                cmd.Parameters.AddWithValue("@Category", category);
 
                 connection.Open();
-                cmd.ExecuteNonQuery();
-                int totalCount = (int)cmd.Parameters["@TotalCount"].Value;
+                var obj = cmd.ExecuteReader();
+                int totalCount = 0;
+
+                if (obj.Read())
+                    totalCount = int.Parse(obj["Count"].ToString());
+
                 connection.Close();
                 return totalCount;
             }
         }
+
         public static IEnumerable<Product> GetProductsFromDataBase(string category = null, int page = 1, int count = 4)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd;
-                cmd = connection.CreateCommand();
-                cmd.CommandText = "TakeProducts";
+                SqlCommand cmd = new SqlCommand("TakeProducts", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                SqlParameter categoryParameter = new SqlParameter();
-                categoryParameter.ParameterName = "@Category";
-                categoryParameter.SqlDbType = SqlDbType.NVarChar;
-                categoryParameter.Size = 50;
-                categoryParameter.Value = category;
-                cmd.Parameters.Add(categoryParameter);
-
-                SqlParameter pageParameter = new SqlParameter("@Page", page);
-                cmd.Parameters.Add(pageParameter);
-
-                SqlParameter countParameter = new SqlParameter("@Count", count);
-                cmd.Parameters.Add(countParameter);
+                cmd.Parameters.AddWithValue("@Category", category);
+                cmd.Parameters.AddWithValue("@Page", page);
+                cmd.Parameters.AddWithValue("@Count", count);
 
                 connection.Open();
                 var obj = cmd.ExecuteReader();
@@ -89,21 +72,15 @@ namespace DataBasesAPI
                 return collection;
             }
         }
+
         public static Product GetProductFromDataBase(int productId)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd;
-
-                cmd = connection.CreateCommand();
-                cmd.CommandText = "TakeProduct";
+                SqlCommand cmd = new SqlCommand("TakeProduct", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                SqlParameter idParameter = new SqlParameter();
-                idParameter.ParameterName = "@ProductID";
-                idParameter.SqlDbType = SqlDbType.Int;
-                idParameter.Value = productId;
-                cmd.Parameters.Add(idParameter);
+                cmd.Parameters.AddWithValue("@ProductID", productId);
 
                 connection.Open();
                 var obj = cmd.ExecuteReader();
@@ -122,31 +99,29 @@ namespace DataBasesAPI
                     if (product.ImageMimeType != "")
                         product.ImageData = (byte[])obj["ImageData"];
                 }
+
                 connection.Close();
                 return product;
             }
         }
+
         public static IEnumerable<string> GetCategories()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd;
-
-                cmd = connection.CreateCommand();
-                cmd.CommandText = "GetCategories";
+                SqlCommand cmd = new SqlCommand("GetCategories", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
-
 
                 connection.Open();
                 var obj = cmd.ExecuteReader();
 
                 List<string> collection = new List<string>();
 
-
                 while (obj.Read())
                 {
                     collection.Add(obj["Category"].ToString());
                 }
+
                 connection.Close();
                 return collection;
             }
@@ -156,23 +131,17 @@ namespace DataBasesAPI
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd;
-
-                cmd = connection.CreateCommand();
-                cmd.CommandText = "DeleteProduct";
+                SqlCommand cmd = new SqlCommand("DeleteProduct", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                SqlParameter idParameter = new SqlParameter();
-                idParameter.ParameterName = "@ProductID";
-                idParameter.SqlDbType = SqlDbType.Int;
-                idParameter.Value = productId;
-                cmd.Parameters.Add(idParameter);
+                cmd.Parameters.AddWithValue("@ProductID", productId);
 
                 connection.Open();
                 cmd.ExecuteNonQuery();
                 connection.Close();
             }
         }
+
         public static void InsertProduct(bool Create, Product product, HttpPostedFileBase image)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -189,69 +158,24 @@ namespace DataBasesAPI
                 else
                 {
                     cmd.CommandText = "UpdateProduct";
-                    parameter.ParameterName = "@ProductId";
-                    parameter.SqlDbType = SqlDbType.Int;
-                    parameter.Value = product.ProductID;
-                    cmd.Parameters.Add(parameter);
+                    cmd.Parameters.AddWithValue("@ProductID", product.ProductID);
                 }
 
-                parameter = new SqlParameter();
-                parameter.ParameterName = "@Name";
-                parameter.SqlDbType = SqlDbType.NVarChar;
-                parameter.Size = 100;
-                parameter.Value = product.Name;
-                cmd.Parameters.Add(parameter);
+                cmd.Parameters.AddWithValue("@Name", product.Name);
+                cmd.Parameters.AddWithValue("@Description", product.Description);
+                cmd.Parameters.AddWithValue("@Category", product.Category);
+                cmd.Parameters.AddWithValue("@Price", product.Price);
+                cmd.Parameters.AddWithValue("@ImageMimeType", image != null ? image.ContentType : product.ImageMimeType);
 
-                parameter = new SqlParameter();
-                parameter.ParameterName = "@Description";
-                parameter.SqlDbType = SqlDbType.NVarChar;
-                parameter.Size = 500;
-                parameter.Value = product.Description;
-                cmd.Parameters.Add(parameter);
-
-                parameter = new SqlParameter();
-                parameter.ParameterName = "@Category";
-                parameter.SqlDbType = SqlDbType.NVarChar;
-                parameter.Size = 50;
-                parameter.Value = product.Category;
-                cmd.Parameters.Add(parameter);
-
-                parameter = new SqlParameter();
-                parameter.ParameterName = "@Price";
-                parameter.SqlDbType = SqlDbType.Decimal;
-                parameter.Value = product.Price;
-                cmd.Parameters.Add(parameter);
-
-                parameter = new SqlParameter();
-                parameter.ParameterName = "@ImageMimeType";
-                parameter.SqlDbType = SqlDbType.VarChar;
-                parameter.Size = 50;
+                byte[] ImageData = new byte[0];
                 if (image != null)
                 {
-                    parameter.Value = image.ContentType;
-                }
-                else
-                {
-                    parameter.Value = product.ImageMimeType;
-                }
-                cmd.Parameters.Add(parameter);
-
-                parameter = new SqlParameter();
-                parameter.ParameterName = "@ImageData";
-                parameter.SqlDbType = SqlDbType.VarBinary;
-                if (image != null)
-                {
-                    byte[] ImageData = new byte[image.ContentLength];
+                    ImageData = new byte[image.ContentLength];
                     image.InputStream.Read(ImageData, 0, image.ContentLength);
                     parameter.Value = ImageData;
                 }
-                else
-                {
-                    parameter.Value = product.ImageData;
-                }
 
-                cmd.Parameters.Add(parameter);
-
+                cmd.Parameters.AddWithValue("@ImageData", image != null ? ImageData : product.ImageData);
 
                 connection.Open();
                 cmd.ExecuteNonQuery();

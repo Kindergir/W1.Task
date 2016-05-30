@@ -11,13 +11,6 @@ namespace W1.WebUI.Controllers
 {
     public class NavController : Controller
     {
-        private IProductRepository repository;
-
-        public NavController(IProductRepository repo)
-        {
-            repository = repo;
-        }
-
         public PartialViewResult Menu(string category = null)
         {
             ViewBag.SelectedCategory = category;

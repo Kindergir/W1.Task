@@ -11,12 +11,7 @@ namespace W1.WebUI.Controllers
 {
     public class ProductController : Controller
     {
-        private IProductRepository repository;
         public int pageSize = 4;
-        public ProductController(IProductRepository productRepository)
-        {
-            this.repository = productRepository;
-        }
 
         public ViewResult List(string category, int page = 1)
         {
@@ -37,7 +32,7 @@ namespace W1.WebUI.Controllers
 
         public FileContentResult GetImage(int productId)
         {
-            Product prod = repository.Products.FirstOrDefault(p => p.ProductID == productId);
+            Product prod = DataBasesAPI.DataBaseExplorer.GetProductFromDataBase(productId);
             if (prod != null)
             {
                 return File(prod.ImageData, prod.ImageMimeType);

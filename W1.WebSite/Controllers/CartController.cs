@@ -8,20 +8,10 @@ using System.Web;
 using System.Web.Mvc;
 using W1.HtmlHelpers;
 
-
 namespace W1.WebUI.Controllers
 {
     public class CartController : Controller
     {
-        private IProductRepository repository;
-        private IOrderProcessor orderProcessor;
-
-        public CartController(IProductRepository repo, IOrderProcessor proc)
-        {
-            repository = repo;
-            orderProcessor = proc;
-        }
-
         public ViewResult Index(Cart cart, string returnUrl)
         { 
             return View(new CartIndexViewModel 
@@ -85,7 +75,6 @@ namespace W1.WebUI.Controllers
                 System.Web.HttpContext.Current.Items.Add("ShippingDetails", shippingDetails);
                 PaymentForm paymentForm = new PaymentForm();
                 paymentForm.ProcessRequest(System.Web.HttpContext.Current);
-                //orderProcessor.ProcessOrder(cart, shippingDetails);
                 cart.Clear();
                 return View("Complete");
             }
