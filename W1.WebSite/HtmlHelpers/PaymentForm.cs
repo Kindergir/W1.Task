@@ -21,7 +21,7 @@ namespace W1.HtmlHelpers
             formField.Add("WMI_CURRENCY_ID", "643");
             //formField.Add("WMI_PAYMENT_NO", "12345-001");
             //formField.Add("WMI_DESCRIPTION", "BASE64:" + Convert.ToBase64String(Encoding.UTF8.GetBytes("Payment for order #12345-001 in MYSHOP.com")));
-            formField.Add("WMI_EXPIRED_DATE", DateTime.Now.AddDays(1.0).ToString());
+            //formField.Add("WMI_EXPIRED_DATE", DateTime.Now.AddDays(1.0).ToString());
             //formField.Add("WMI_SUCCESS_URL", "https://myshop.com/w1/success.php");
             //formField.Add("WMI_FAIL_URL", "https://myshop.com/w1/fail.php");
             formField.Add("Name", ((ShippingDetails)context.Items["ShippingDetails"]).Name); // Дополнительные параметры

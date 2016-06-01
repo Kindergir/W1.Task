@@ -50,6 +50,7 @@ namespace W1.WebUI.Controllers
 
         public ViewResult Create()
         {
+            ViewData["Categories"] = new SelectList(DataBasesAPI.DataBaseExplorer.GetCategories(), "Key", "Value", 1);
             return View("Edit", new Product());
         }
 

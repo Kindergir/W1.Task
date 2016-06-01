@@ -12,7 +12,7 @@ namespace DataBasesAPI
     public class DataBaseExplorer
     {
         private static string connectionString =
-              @"Data Source=HOME\SQLEXPRESS;Initial Catalog=W1;Integrated Security=True;";
+             @"Data Source=HOME\SQLEXPRESS;Initial Catalog=W1;Integrated Security=True;";
 
         public static int GetTotalCount(string category = null)
         {
