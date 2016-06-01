@@ -25,7 +25,7 @@ namespace W1.Domain.Entities
         public decimal Price { get; set; }
 
         [Required(ErrorMessage = "Please specify a category")] 
-        public string Category { get; set; }
+        public int CategoryID { get; set; }
 
         public byte[] ImageData { get; set; }
 

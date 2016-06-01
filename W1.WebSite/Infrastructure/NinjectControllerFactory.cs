@@ -33,9 +33,6 @@ namespace W1.WebUI.Infrastructure
 
         private void AddBindings()
         {
-            //это что?
-            //ninjectKernel.Bind<IProductRepository>().To<EFProductRepository>();
-
             EmailSettings emailSettings = new EmailSettings
             {
                 WriteAsFile = bool.Parse(ConfigurationManager

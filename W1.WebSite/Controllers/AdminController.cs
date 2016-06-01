@@ -19,6 +19,7 @@ namespace W1.WebUI.Controllers
         public ViewResult Edit(int productId)
         {
             Product product = DataBasesAPI.DataBaseExplorer.GetProductFromDataBase(productId);
+            ViewData["Categories"] = new SelectList(DataBasesAPI.DataBaseExplorer.GetCategories(), "Key", "Value", product.CategoryID);
             return View(product);
         }
 
@@ -33,6 +34,18 @@ namespace W1.WebUI.Controllers
             }
             else
                 return View(product);
+        }
+
+        public ViewResult AddCategory()
+        {
+            return View("AddCategory", String.Empty);
+        }
+
+        [HttpPost]
+        public ActionResult AddCategory(String name)
+        {
+            DataBasesAPI.DataBaseExplorer.AddCategory(name);
+            return RedirectToAction("Index");
         }
 
         public ViewResult Create()

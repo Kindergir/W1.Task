@@ -12,7 +12,7 @@ namespace DataBasesAPI
     public class DataBaseExplorer
     {
         private static string connectionString =
-            @"Data Source=HOME\SQLEXPRESS;Initial Catalog=W1;Integrated Security=True;";
+              @"Data Source=HOME\SQLEXPRESS;Initial Catalog=W1;Integrated Security=True;";
 
         public static int GetTotalCount(string category = null)
         {
@@ -24,7 +24,7 @@ namespace DataBasesAPI
                 cmd.CommandText = "GetTotalCount";
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Category", category);
+                cmd.Parameters.AddWithValue("@CategoryName", category);
 
                 connection.Open();
                 var obj = cmd.ExecuteReader();
@@ -45,7 +45,7 @@ namespace DataBasesAPI
                 SqlCommand cmd = new SqlCommand("TakeProducts", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Category", category);
+                cmd.Parameters.AddWithValue("@CategoryName", category);
                 cmd.Parameters.AddWithValue("@Page", page);
                 cmd.Parameters.AddWithValue("@Count", count);
 
@@ -60,7 +60,7 @@ namespace DataBasesAPI
                     product = new Product();
                     product.ProductID = int.Parse(obj["ProductID"].ToString());
                     product.Name = obj["Name"].ToString();
-                    product.Category = obj["Category"].ToString();
+                    product.CategoryID = int.Parse(obj["CategoryID"].ToString());
                     product.Description = obj["Description"].ToString();
                     product.Price = decimal.Parse(obj["Price"].ToString());
                     product.ImageMimeType = obj["ImageMimeType"].ToString();
@@ -92,7 +92,7 @@ namespace DataBasesAPI
                     product = new Product();
                     product.ProductID = int.Parse(obj["ProductID"].ToString());
                     product.Name = obj["Name"].ToString();
-                    product.Category = obj["Category"].ToString();
+                    product.CategoryID = int.Parse(obj["CategoryID"].ToString());
                     product.Description = obj["Description"].ToString();
                     product.Price = decimal.Parse(obj["Price"].ToString());
                     product.ImageMimeType = obj["ImageMimeType"].ToString();
@@ -105,7 +105,7 @@ namespace DataBasesAPI
             }
         }
 
-        public static IEnumerable<string> GetCategories()
+        public static Dictionary<String, String> GetCategories()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -115,15 +115,31 @@ namespace DataBasesAPI
                 connection.Open();
                 var obj = cmd.ExecuteReader();
 
-                List<string> collection = new List<string>();
+                Dictionary<String, String> categories = new Dictionary<String, String>();
 
                 while (obj.Read())
                 {
-                    collection.Add(obj["Category"].ToString());
+                    categories.Add(obj["CategoryId"].ToString(),
+                        obj["CategoryName"].ToString());
                 }
 
                 connection.Close();
-                return collection;
+                return categories;
+            }
+        }
+
+        public static void AddCategory(string name)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("AddCategory", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@Name", name);
+
+                connection.Open();
+                var obj = cmd.ExecuteReader();
+                connection.Close();
             }
         }
 
@@ -163,7 +179,7 @@ namespace DataBasesAPI
 
                 cmd.Parameters.AddWithValue("@Name", product.Name);
                 cmd.Parameters.AddWithValue("@Description", product.Description);
-                cmd.Parameters.AddWithValue("@Category", product.Category);
+                cmd.Parameters.AddWithValue("@CategoryID", product.CategoryID);
                 cmd.Parameters.AddWithValue("@Price", product.Price);
                 cmd.Parameters.AddWithValue("@ImageMimeType", image != null ? image.ContentType : product.ImageMimeType);
 

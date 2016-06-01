@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "AddCategory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>AddCategory</h2>
+
+@using (Html.BeginForm("AddCategory", "Admin",
+  FormMethod.Post, new {enctype = "multipart/form-data"}))
+{
+<p>
+    Имя категории:
+    <input type="text" placeholder="Введите категорию" name="name">
+</p>
+<input type="submit" value="Add" />
+  @Html.ActionLink("Cancel and return to List", "Index")
+}

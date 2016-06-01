@@ -14,7 +14,7 @@ namespace W1.WebUI.Controllers
         public PartialViewResult Menu(string category = null)
         {
             ViewBag.SelectedCategory = category;
-            IEnumerable<string> categories = DataBasesAPI.DataBaseExplorer.GetCategories();
+            IDictionary<String, String> categories = DataBasesAPI.DataBaseExplorer.GetCategories();
             return PartialView(categories); 
         } 
     }
