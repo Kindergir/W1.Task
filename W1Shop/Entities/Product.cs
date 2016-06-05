@@ -24,7 +24,8 @@ namespace W1.Domain.Entities
         [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a positive price")] 
         public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Please specify a category")] 
+        [Required]
+        [Range(1, Int32.MaxValue, ErrorMessage = "Please specify a category")]
         public int CategoryID { get; set; }
 
         public byte[] ImageData { get; set; }

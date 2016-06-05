@@ -105,7 +105,7 @@ namespace DataBasesAPI
             }
         }
 
-        public static Dictionary<String, String> GetCategories()
+        public static Dictionary<Int32, String> GetCategories()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -115,11 +115,11 @@ namespace DataBasesAPI
                 connection.Open();
                 var obj = cmd.ExecuteReader();
 
-                Dictionary<String, String> categories = new Dictionary<String, String>();
+                Dictionary<Int32, String> categories = new Dictionary<Int32, String>();
 
                 while (obj.Read())
                 {
-                    categories.Add(obj["CategoryId"].ToString(),
+                    categories.Add(Int32.Parse(obj["CategoryId"].ToString()),
                         obj["CategoryName"].ToString());
                 }
 

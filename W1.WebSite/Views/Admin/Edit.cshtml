@@ -7,15 +7,21 @@
 
 <h1>Edit @Model.Name</h1>
 @using (Html.BeginForm("Edit", "Admin",
-  FormMethod.Post, new { enctype = "multipart/form-data" })) {
-  @Html.EditorForModel()
-<div class="editor-label">Image</div>
+  FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+  @Html.ValidationSummary()
+  @Html.AntiForgeryToken()
+  @Html.HiddenFor(model => model.ProductID)
+<p>Категория: @Html.DropDownListFor(model => model.CategoryID, (SelectList)ViewData["Categories"])</p>
+<p>Название: @Html.EditorFor(model => model.Name)</p>
+<p>Цена: @Html.EditorFor(model => model.Price)</p>
+<p>Описание: @Html.EditorFor(model => model.Description)</p>
+<p><div class="editor-label">Image</div></p>
 <div class="editor-field">
     @if (Model.ImageData == null) {
     @:None
-    }
-    else {
-    <img width="150" height="150" src="@Url.Action("GetImage", "Product" , new { Model.ProductID })" />
+    } else {
+    <img width="150" height="150" src="@Url.Action(" getimage", "Product" , new { model.productid })" />
     }
     <div>
         Upload new image:

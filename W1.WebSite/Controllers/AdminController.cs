@@ -5,6 +5,7 @@ using W1.Domain.Abstract;
 using W1.Domain.Entities;
 using System.Web;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace W1.WebUI.Controllers
 {
@@ -33,7 +34,10 @@ namespace W1.WebUI.Controllers
                 return RedirectToAction("Index");
             }
             else
+            {
+                ViewData["Categories"] = new SelectList(DataBasesAPI.DataBaseExplorer.GetCategories(), "Key", "Value", product.CategoryID);
                 return View(product);
+            }
         }
 
         public ViewResult AddCategory()
@@ -44,14 +48,23 @@ namespace W1.WebUI.Controllers
         [HttpPost]
         public ActionResult AddCategory(String name)
         {
-            DataBasesAPI.DataBaseExplorer.AddCategory(name);
+            if (!Regex.IsMatch(name, @"\W+"))
+            {
+                TempData["message"] = string.Format("{0} has been added to category", name);
+                DataBasesAPI.DataBaseExplorer.AddCategory(name);
+            }
+            else
+            {
+                TempData["message"] = string.Format("{0} is incorrect name for category", name);
+            }
             return RedirectToAction("Index");
         }
 
         public ViewResult Create()
         {
-            ViewData["Categories"] = new SelectList(DataBasesAPI.DataBaseExplorer.GetCategories(), "Key", "Value", 1);
-            return View("Edit", new Product());
+            var product = new Product { CategoryID = 1 };
+            ViewData["Categories"] = new SelectList(DataBasesAPI.DataBaseExplorer.GetCategories(), "Key", "Value", product.CategoryID);
+            return View("Edit", product);
         }
 
         [HttpPost]
