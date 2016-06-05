@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace W1.WebUI.Controllers
 {
-    [Authorize] 
+    [Authorize]
     public class AdminController : Controller
     {
         public ViewResult Index()
